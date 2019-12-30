@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+	<head>
+		<meta charset="utf-8" />
+		<title>Apache Wicket Quickstart</title>
+		<link rel="stylesheet" href="./bower_components/bootstrap/dist/css/bootstrap.min.css">
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-6">
+					<h1>Search Customers</h1>
+					<div wicket:id="feedback">[ENTERING FEEDBACK]</div>
+					<form method="POST" class="form-group" wicket:id="users">
+						<div class="form-group input-group">
+							<input type="text" class="form-control" placeholder="Enter your keywords" wicket:id="keyword">
+						</div>
+						<div class="form-group input-group">
+							<select wicket:id="types" class="form-control"></select>
+						</div>
+						<input type="submit" class="btn btn-danger" value="send" wicket:id="send">
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

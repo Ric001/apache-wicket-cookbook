@@ -1,0 +1,17 @@
+{
+  "name": "webapp",
+  "authors": [
+    "Jose Osorio Soto <jose_osorio_soto@claro.com.do>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
