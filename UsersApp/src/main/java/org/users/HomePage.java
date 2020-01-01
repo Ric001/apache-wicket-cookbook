@@ -1,6 +1,7 @@
 package org.users;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.validation.IValidationError;
 import org.apache.wicket.validation.ValidationError;
 
 import java.util.Arrays;
@@ -21,6 +22,7 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 
 public class HomePage extends WebPage {
@@ -33,13 +35,15 @@ public class HomePage extends WebPage {
 
 	public HomePage(final PageParameters parameters) {
 		super(parameters);
+
 		add(new FeedbackPanel("feedback"));
 		final List<Component> components = new LinkedList<>();
 		components.add(getDropDownChoice("types"));
 		components.add(getKeywords("keyword"));
-		components.add(button("send"));
-		add(usernameForm("users",  components));
-	}
+		components.add(submitEvent("send"));
+		add(queries("users",  components));
+		add(getRegiserForm("user-registratio"));
+	}	
 
 	private DropDownChoice<String> getDropDownChoice(String id) {
 		LOG.info("[RETURNING FROM DropDownChoice<String> getDropDownChoice(String id)]");
@@ -53,7 +57,6 @@ public class HomePage extends WebPage {
 
 	private AjaxFallbackLink<Void> ajaxFallBackButton(final String id) {
 		LOG.info("[RETURNING AjaxFallbackLink<Void> ajaxFallbackButton(String id)]");
-
 		return new AjaxFallbackLink<Void>(id) {
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -64,13 +67,12 @@ public class HomePage extends WebPage {
 		};
 	}
 
-	private Button button(String id) {
-		LOG.info("[Button button(String id)]");
-		
+	private Button submitEvent(String id) {
+		LOG.info("[Button subitEvent(String id)]");
 		return new Button(id);
 	}
 
-	private Form<Void> usernameForm(final String id, List<Component> componentsToAdd) {
+	private Form<Void> queries(final String id, List<Component> componentsToAdd) {
 		LOG.info("[ENTERING Form<Void> rnameForm(final String id, List<FormComponent<?>> componentsToAdd)]");
 		if (Objects.isNull(id) || id.isEmpty())
 			return null;
@@ -99,6 +101,19 @@ public class HomePage extends WebPage {
 		return userForm;
 	}
 
+	private Form<Void> getRegiserForm(final String id) {
+		LOG.info("[ENTERING Form<Void> getRegisterForm(final String id, final List<Component> componentsToAdd)]");
+		
+		final CompoundPropertyModel<User> compoundPropertyModel = new CompoundPropertyModel<>(new User());
+		final UserRegistration userRegistration = new UserRegistration(Optional.of(compoundPropertyModel), id);
+		final Form<Void> registrationForm = userRegistration.getRegistrationForm();
+
+		LOG.info(String.format("[RETURNING Form<Void> getRegistrationForm(final String id, final List<Component> componentsToAdd)]: %s", registrationForm));
+		return registrationForm;
+	}
+
+	//Create a method to Form<Void> getRegisterForm(final String id, final List<Component> componentsToAdd), to control the validators with the component References
+
 	private void runPatternValiations(final TextField<String> keyword, final DropDownChoice<String> selectedType) {
 		LOG.info("[ENTERING void runPatternValiations(final String keyword, final String selectedType)]");
 
@@ -109,7 +124,4 @@ public class HomePage extends WebPage {
 		
 		LOG.info("[ENDING void runPatternValiations(final TextField<String> keyword, final DropDownChoice<String> selectedType)]");
 	}
-
-	
-
 }
