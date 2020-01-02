@@ -1,7 +1,6 @@
 package org.users;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.validation.IValidationError;
 import org.apache.wicket.validation.ValidationError;
 
 import java.util.Arrays;
@@ -21,6 +20,7 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
@@ -42,7 +42,8 @@ public class HomePage extends WebPage {
 		components.add(getKeywords("keyword"));
 		components.add(submitEvent("send"));
 		add(queries("users",  components));
-		add(getRegiserForm("user-registratio"));
+		add(getRegisterForm("user-registration"));
+		getRedirectionTab().forEach(this::add);
 	}	
 
 	private DropDownChoice<String> getDropDownChoice(String id) {
@@ -101,7 +102,7 @@ public class HomePage extends WebPage {
 		return userForm;
 	}
 
-	private Form<Void> getRegiserForm(final String id) {
+	private Form<Void> getRegisterForm(final String id) {
 		LOG.info("[ENTERING Form<Void> getRegisterForm(final String id, final List<Component> componentsToAdd)]");
 		
 		final CompoundPropertyModel<User> compoundPropertyModel = new CompoundPropertyModel<>(new User());
@@ -123,5 +124,23 @@ public class HomePage extends WebPage {
 			keyword.error(new ValidationError().setMessage("INVALID PHONE NUMBER"));
 		
 		LOG.info("[ENDING void runPatternValiations(final TextField<String> keyword, final DropDownChoice<String> selectedType)]");
+	}
+
+
+	private List<Link<Void>> getRedirectionTab() {
+
+		final List<Link<Void>> links = new LinkedList<>();
+		links.add(getLink("signupPageLink"));
+		return links;
+	}
+
+	private Link<Void> getLink(String id) {
+		return new Link<Void>(id) {
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void onClick() {
+				setResponsePage(SignupPage.class);
+			}
+		};
 	}
 }

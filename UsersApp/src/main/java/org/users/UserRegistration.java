@@ -14,6 +14,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.users.utils.InstanceValidator;
 import org.users.validators.PolicyPasswordValidator;
@@ -23,15 +24,15 @@ public class UserRegistration implements Serializable {
 
     private static final Logger LOG = Logger.getLogger(UserRegistration.class.getName());
 
-    private String id;
+    private final String id;
     private Form<Void> registrationForm;
     private TextField<String> username;
     private PasswordTextField password;
     private PasswordTextField confPassword;
-    private Optional<IModel<User>> compModel;
+    private final Optional<IModel<User>> compModel;
     private Button send;
 
-    public UserRegistration(Optional<IModel<User>> compModel, String id) {
+    public UserRegistration(final Optional<IModel<User>> compModel, final String id) {
         this.compModel = compModel;
         this.id = id;
         init();
@@ -42,13 +43,23 @@ public class UserRegistration implements Serializable {
     private void init() {
         LOG.info("[ENTERING void init()]");
 
-        registrationForm = new Form<Void>("user-registration");
+        registrationForm = new Form<Void>(getDefaultId());
         username = new TextField<>("username");
         password = new PasswordTextField("password");
         confPassword = new PasswordTextField("confPassword");
         send = new Button("register");
 
         LOG.info("[RETURNING void init()]");
+    }
+    
+    private String getDefaultId() {
+        LOG.info("[ENTERING String getDefaultId()]");
+
+        if (Objects.isNull(id)) 
+            return "user-registration";
+        
+        LOG.info("[RETURNING FROM String getDefaultId()]");
+        return id;
     }
 
     private void initModel() {
@@ -75,7 +86,20 @@ public class UserRegistration implements Serializable {
             confPassword.add(policyPassValidator);
         }
 
-        LOG.info("[RETURNING void setValidatorsInTheForm()]");
+        LOG.info("[ENDING void setValidatorsInTheForm()]");
+    }
+
+    public  UserRegistration addExtraValidators(final Object... validators) {
+        LOG.info("[ENTERING void addExtraValidators(IValidator<String>... validators)]");
+        
+        if (Objects.nonNull(validators) &&  validators instanceof IValidator[]) {
+            @SuppressWarnings("unchecked")
+            final IValidator<String>[] validatorsArray = (IValidator<String>[]) validators;
+            Arrays.asList(validatorsArray).forEach(username::add);
+        }
+            
+        LOG.info(String.format("[ENDING FROM addExtraValidators(IValidator<String>... validators): %s]", validators));
+        return this;
     }
 
     public Form<Void> getRegistrationForm() {

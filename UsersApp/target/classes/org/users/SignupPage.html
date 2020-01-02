@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <title>Signup</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <h1>Singup Your Information</h1>
+                <div wicket:id="feedback" class="list-group"></div>
+                <form class="form-group input-group" method="POST" wicket:id="signup">
+                    <div class="form-group input-group">
+                        <input type="text" class="form-control" placeholder="Enter the Username" wicket:id="username">
+                    </div>
+                    <div class="form-group input-group">
+                        <input type="password" class="form-control" placeholder="Enter the Password" wicket:id="password">
+                    </div>
+                    <div class="form-group input-group">
+                        <input type="password" class="form-control" placeholder="Re-enter The Password" wicket:id="confPassword">
+                    </div>
+                    <input type="submit" class="btn btn-danger" value="Register" wicket:id="register">
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                <form method="POST">
+                    <div class="form-group">
+                        <label>Enter The Time</label>
+                        <input type="time" wicket:id="time" type="text" size="20" class="form-control">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
